@@ -17,6 +17,8 @@ class ExpensesApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  final titleController = TextEditingController();
+  final valueController = TextEditingController();
   final _transactions = [
     Transaction(
       id: 't1',
@@ -44,7 +46,6 @@ class MyHomePage extends StatelessWidget {
         title: Text("Despesas Pessoais"),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
@@ -74,7 +75,8 @@ class MyHomePage extends StatelessWidget {
                         ),
                         padding: EdgeInsets.all(10),
                         child: Text(
-                          NumberFormat.currency(symbol: "R\$",decimalDigits: 2).format(tr.value),
+                          NumberFormat.currency(symbol: "R\$", decimalDigits: 2)
+                              .format(tr.value),
                           style: TextStyle(
                               color: Colors.purple,
                               fontSize: 20,
@@ -101,6 +103,40 @@ class MyHomePage extends StatelessWidget {
                   ),
                 );
               }).toList()),
+          Card(
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: titleController,
+                    decoration: InputDecoration(labelText: 'Título'),
+                  ),
+                  TextField(
+                    controller: valueController,
+                    decoration: InputDecoration(
+                      labelText: 'Valor (R\$)',
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      FlatButton(
+                        color: Colors.purple,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          print(titleController.text);
+                          print(valueController.text);
+                        },
+                        child: Text("Nova Transação"),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
