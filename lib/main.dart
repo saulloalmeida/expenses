@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
 
   List<Transaction> get _recentTransactions {
-    return _transactions.where((tr){
+    return _transactions.where((tr) {
       return tr.date.isAfter(DateTime.now().subtract(
         Duration(days: 7),
       ));
@@ -79,13 +79,36 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
-  _removeTransaction(String id){
+
+  _removeTransaction(String id) {
     setState(() {
-      _transactions.removeWhere((tr){
+      _transactions.removeWhere((tr) {
         return tr.id == id;
       });
     });
   }
+
+  Widget showSumOfValues() {
+    var sum = 0.0;
+    for (var tr in _transactions) {
+      setState(() {
+        sum += tr.value;
+      });
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Card(
+          child: Text(
+            'Valor Total Gasto: R\$ ${sum.toStringAsFixed(2)}',
+            style: Theme.of(context).textTheme.title,          
+            ),
+          elevation: 5,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            showSumOfValues(),
             TransactionChart(_recentTransactions),
             TransactionList(_transactions, _removeTransaction),
           ],
